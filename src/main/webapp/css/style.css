@@ -1,3 +1,6 @@
+body{
+    font-family: sans-serif;
+}
 #graph{
     border: 1px solid #ccc;
     height: 500px;
