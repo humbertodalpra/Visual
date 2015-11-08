@@ -1,4 +1,8 @@
-
+#graph{
+    border: 1px solid #ccc;
+    height: 500px;
+    width: 960px;
+}
 
 .link {
     fill: none;

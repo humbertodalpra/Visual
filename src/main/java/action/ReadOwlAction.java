@@ -1,4 +1,4 @@
-package action.exemplos;
+package action;
 
 import controller.Action;
 import javax.servlet.ServletException;
