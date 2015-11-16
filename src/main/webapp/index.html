@@ -7,10 +7,15 @@
     <script src="js/index.js"></script>
 </head>
 <body>
-    <h1>Provenance Ontology</h1>
-    <form method="post" action="FrontController?action=ReadOWL">
-        Ontology <input type="file" name="ontology"> <input type="submit" value="Load"><br>
+    <div id="config">
+        <h1>Provenance Ontology</h1>
+        Ontology: <span class="codeLike" id="owlPath">C:\Users\041784\Documents\NetBeansProjects\Visual\ex2.owl</span>
+        <form>
+            <button onclick="startReasoner()" disabled>Start Reasoner</button>
+        </form>
         <br>
-    </form>
-    <div id="graph"></div>
+    </div>
+    <div id="graph">
+    </div>
+
 </body>

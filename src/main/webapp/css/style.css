@@ -1,6 +1,15 @@
 body{
     font-family: sans-serif;
 }
+
+#codeLike{
+    color: #666;
+    font-weight: bold;
+    font-size: large;
+    font-family: monospace;
+}
+
+
 #graph{
     border: 1px solid #ccc;
     height: 500px;
