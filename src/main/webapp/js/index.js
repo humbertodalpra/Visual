@@ -9,31 +9,33 @@ $(window).resize(function () {
 });
 
 $(document).ready(function () {
+    
     $("input[type=radio][name=icon").change(function () {
         if (this.value === "prov") {
             svg.selectAll("image")
                     .attr("xlink:href", function (node) {
                         if (node.type === "Activity")
-                            return "./img/activity.png";
+                            return "./img/colorActivity.png";
                         else if (node.type === "Person")
-                            return "./img/agent.png";
+                            return "./img/colorAgent.png";
                         else
-                            return "./img/entity.png";
+                            return "./img/colorEntity.png";
                     });
         } else if (this.value === "bpmn") {
             svg.selectAll("image")
                     .attr("xlink:href", function (node) {
                         if (node.type === "Activity")
-                            return "./img/task.png";
+                            return "./img/colorTask.png";
                         else if (node.type === "Person")
-                            return "./img/actor.png";
+                            return "./img/colorActor.png";
                         else
-                            return "./img/data.png";
+                            return "./img/colorData.png";
                     });
         } else {
             svg.selectAll("image").attr("xlink:href", "./img/entity.png");
         }
     });
+    
     var svg = d3.select("#graph")
             .append("svg");
 
@@ -46,7 +48,6 @@ $(document).ready(function () {
                 .charge(-300)
                 .linkDistance(60)
                 .size([$("#graph").width(), $("#graph").height()]);
-//--------------------------------------------------------------------
 
         force.nodes(graph.nodes)
                 .links(graph.links)
@@ -65,8 +66,8 @@ $(document).ready(function () {
                 .enter().append("image")
                 .attr("class", "node")
                 .attr("xlink:href", "./img/entity.png")
-                .attr("width", "25")
-                .attr("height", "25")
+                .attr("width", "24")
+                .attr("height", "24")
                 .call(force.drag);
 
         node.append("title")
@@ -92,19 +93,7 @@ $(document).ready(function () {
                     .attr("y", function (d) { return d.y -12; });
         });
 
-
     }, "json");
 
-
-    /*
-     svg.selectAll("image")
-     .data(nodes)
-     .enter()
-     .append("image")
-     .data(nodes)
-     .attr("xlink:href", "./img/actor.png")
-     .attr("width", "20")
-     .attr("height", "20");
-     */
 });
 

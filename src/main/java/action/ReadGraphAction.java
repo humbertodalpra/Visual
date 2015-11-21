@@ -21,7 +21,6 @@ public class ReadGraphAction extends Action{
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try {
-            System.out.println(json);
             response.getWriter().write(json);
         } catch (IOException ex) {
             Logger.getLogger(ReadGraphAction.class.getName()).log(Level.SEVERE, null, ex);
