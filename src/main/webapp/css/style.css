@@ -9,39 +9,31 @@ body{
     font-family: monospace;
 }
 
-
 #graph{
     border: 1px solid #ccc;
     height: 500px;
     width: 960px;
 }
 
-.link {
+line {
     fill: none;
     stroke: #666;
     stroke-width: 1.5px;
 }
+line.inferred {
+    stroke: #f00;
+}
 
-#licensing {
+#inferred{
     fill: red;
 }
-
-.link.licensing {
-    stroke: red;
+#asserted{
+    fill: black;
 }
 
-.link.resolved {
-    stroke-dasharray: 0,2 1;
-}
-
-circle {
-    fill: #ccc;
-    stroke: #333;
-    stroke-width: 1.5px;
-}
-
+/*
 text {
     font: 10px sans-serif;
     pointer-events: none;
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-}
+}*/

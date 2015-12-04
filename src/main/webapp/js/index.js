@@ -9,63 +9,63 @@ $(window).resize(function () {
 });
 
 $(document).ready(function () {
-    
-    $("input[type=radio][name=icon").change(function () {
-        if (this.value === "prov") {
-            svg.selectAll("image")
-                    .attr("xlink:href", function (node) {
-                        if (node.type === "Activity")
-                            return "./img/colorActivity.png";
-                        else if (node.type === "Person")
-                            return "./img/colorAgent.png";
-                        else
-                            return "./img/colorEntity.png";
-                    });
-        } else if (this.value === "bpmn") {
-            svg.selectAll("image")
-                    .attr("xlink:href", function (node) {
-                        if (node.type === "Activity")
-                            return "./img/colorTask.png";
-                        else if (node.type === "Person")
-                            return "./img/colorActor.png";
-                        else
-                            return "./img/colorData.png";
-                    });
-        } else {
-            svg.selectAll("image").attr("xlink:href", "./img/entity.png");
-        }
-    });
-    
+
     var svg = d3.select("#graph")
             .append("svg");
-
     $(window).resize();
-
     $.post("FrontController?action=ReadGraph", function (json) {
+        //alert(JSON.stringify(json));
         var graph = json;
-
         var force = d3.layout.force()
                 .charge(-300)
-                .linkDistance(60)
+                .linkDistance(80)
                 .size([$("#graph").width(), $("#graph").height()]);
 
         force.nodes(graph.nodes)
                 .links(graph.links)
                 .start();
 
+        //Defines the arrow for the links
+        svg.append("defs").selectAll("marker")
+                .data(["inferred", "asserted"])
+                .enter().append("marker")
+                .attr("id", function (d) {
+                    return d;
+                })
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", 24)
+                .attr("refY", 0)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5");
+
         var link = svg.selectAll("link")
                 .data(graph.links)
                 .enter().append("line")
-                .attr("class", "link")
+                .attr("class", function (d){
+                    if(d.inferred) return "inferred";
+                    else return "asserted";
+                })
+                .attr("marker-end", function (d){
+                    if(d.inferred) return "url(#inferred)";
+                    else return "url(#asserted)";
+                })
                 .style("stroke-width", function (d) {
                     return Math.sqrt(d.value);
                 });
-
+                
+        link.append("title")
+                .text(function (d) {
+                    return d.name;
+                });
+                
         var node = svg.selectAll("image")
                 .data(graph.nodes)
                 .enter().append("image")
                 .attr("class", "node")
-                .attr("xlink:href", "./img/entity.png")
+                .attr("xlink:href", "./img/circle.png")
                 .attr("width", "24")
                 .attr("height", "24")
                 .call(force.drag);
@@ -89,8 +89,12 @@ $(document).ready(function () {
                         return d.target.y;
                     });
 
-            node.attr("x", function (d) { return d.x - 12; })
-                    .attr("y", function (d) { return d.y -12; });
+            node.attr("x", function (d) {
+                return d.x - 12;
+            })
+                    .attr("y", function (d) {
+                        return d.y - 12;
+                    });
         });
 
     }, "json");
