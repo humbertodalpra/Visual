@@ -24,18 +24,52 @@ public class Graph {
         return links;
     }
 
-    public void addLinks(Node source, ArrayList<Node> targets) {
+    public void assertLinks(String name, Node source, ArrayList<Node> targets) {
         int size = nodes.size();
-        for (int i = 0; i < size; i++) {
-            if (nodes.get(i).sameAs(source)) {
+        for (int s = 0; s < size; s++) {
+            if (nodes.get(s).sameAs(source)) {
                 for (Node target : targets) {
-                    for (int j = 0; j < size; j++) {
-                        if (nodes.get(j).sameAs(target)) {
-                            links.add(new Link(i, j));
+                    for (int t = 0; t < size; t++) {
+                        if (nodes.get(t).sameAs(target)) {
+                            Link link = findLink(s, t);
+                            if(link != null){
+                                link.setInferred(false);
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    public void addLinks(String name, boolean inferred, Node source, ArrayList<Node> targets) {
+        int size = nodes.size();
+        for (int s = 0; s < size; s++) {
+            if (nodes.get(s).sameAs(source)) {
+                for (Node target : targets) {
+                    for (int t = 0; t < size; t++) {
+                        if (nodes.get(t).sameAs(target)) {
+                            links.add(new Link(name, inferred, s, t));
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean lookFor(Link link) {
+        return true;
+    }
+
+    private Link findLink(int s, int t) {
+        Link link;
+        for (int i = 0; i < links.size(); i++) {
+            link = links.get(i);
+            if (link.getSource() == s && link.getTarget() == t) {
+                return link;
+            }
+        }
+        return null;
     }
 }
