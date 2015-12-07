@@ -2,7 +2,7 @@ body{
     font-family: sans-serif;
 }
 
-#codeLike{
+.codeLike{
     color: #666;
     font-weight: bold;
     font-size: large;
@@ -15,19 +15,21 @@ body{
     width: 960px;
 }
 
-line {
+path.asserted {
     fill: none;
-    stroke: #666;
+    stroke: black;
     stroke-width: 1.5px;
 }
-line.inferred {
-    stroke: #f00;
+path.inferred {
+    fill: none;
+    stroke: red;
+    stroke-width: 1.5px;
 }
 
-#inferred{
+path#inferred{
     fill: red;
 }
-#asserted{
+path#asserted{
     fill: black;
 }
 

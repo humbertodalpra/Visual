@@ -32,7 +32,7 @@ public class Graph {
                     for (int t = 0; t < size; t++) {
                         if (nodes.get(t).sameAs(target)) {
                             Link link = findLink(s, t);
-                            if(link != null){
+                            if (link != null) {
                                 link.setInferred(false);
                             }
                         }
@@ -49,8 +49,11 @@ public class Graph {
                 for (Node target : targets) {
                     for (int t = 0; t < size; t++) {
                         if (nodes.get(t).sameAs(target)) {
-                            links.add(new Link(name, inferred, s, t));
-
+                            Link link = findLink(s, t);
+                            if (link == null) {
+                                links.add(new Link(name, inferred, s, t));
+                            }
+                            //Adiciona lista de ligações------------------------
                         }
                     }
                 }

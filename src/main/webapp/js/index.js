@@ -1,6 +1,6 @@
 $(window).resize(function () {
     var width = $(window).width() - 18;
-    var height = $(window).height() - ($("#config").height() + 32);
+    var height = 700;//$(window).height() - ($("#config").height() + 32);
     $("#graph").width(width)
             .height(height);
     d3.select("svg")
@@ -12,7 +12,9 @@ $(document).ready(function () {
 
     var svg = d3.select("#graph")
             .append("svg");
+
     $(window).resize();
+
     $.post("FrontController?action=ReadGraph", function (json) {
         //alert(JSON.stringify(json));
         var graph = json;
@@ -33,38 +35,47 @@ $(document).ready(function () {
                     return d;
                 })
                 .attr("viewBox", "0 -5 10 10")
-                .attr("refX", 24)
-                .attr("refY", 0)
+                .attr("refX", 22)
+                .attr("refY", -2)
                 .attr("markerWidth", 6)
                 .attr("markerHeight", 6)
                 .attr("orient", "auto")
                 .append("path")
+                .attr("id", function (d) {
+                    return d;
+                })
                 .attr("d", "M0,-5L10,0L0,5");
 
-        var link = svg.selectAll("link")
+        var path = svg.selectAll("path")
                 .data(graph.links)
-                .enter().append("line")
-                .attr("class", function (d){
-                    if(d.inferred) return "inferred";
-                    else return "asserted";
+                .enter().append("path")
+                .attr("class", function (d) {
+                    if (d.inferred)
+                        return "inferred";
+                    else
+                        return "asserted";
                 })
-                .attr("marker-end", function (d){
-                    if(d.inferred) return "url(#inferred)";
-                    else return "url(#asserted)";
+                .attr("marker-end", function (d) {
+                    if (d.inferred)
+                        return "url(#inferred)";
+                    else
+                        return "url(#asserted)";
                 })
-                .style("stroke-width", function (d) {
-                    return Math.sqrt(d.value);
-                });
-                
-        link.append("title")
+                /*.style("stroke-width", function (d) {
+                 return Math.sqrt(d.value);
+                 })*/;
+
+        path.append("title")
                 .text(function (d) {
                     return d.name;
                 });
-                
+
         var node = svg.selectAll("image")
                 .data(graph.nodes)
                 .enter().append("image")
-                .attr("class", "node")
+                .attr("class", function (n) {
+                    return n.type;
+                })
                 .attr("xlink:href", "./img/circle.png")
                 .attr("width", "24")
                 .attr("height", "24")
@@ -76,7 +87,7 @@ $(document).ready(function () {
                 });
 
         force.on("tick", function () {
-            link.attr("x1", function (d) {
+            path.attr("x1", function (d) {
                 return d.source.x;
             })
                     .attr("y1", function (d) {
@@ -87,6 +98,12 @@ $(document).ready(function () {
                     })
                     .attr("y2", function (d) {
                         return d.target.y;
+                    })
+                    .attr("d", function (d) {
+                        var dx = d.target.x - d.source.x,
+                                dy = d.target.y - d.source.y,
+                                dr = Math.sqrt(dx * dx + dy * dy);
+                        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
                     });
 
             node.attr("x", function (d) {
