@@ -13,7 +13,7 @@ public class ReadOWLPathAction extends Action {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        String reply = OntologyDAO.getInstance().getFile();
+        String reply = OntologyDAO.getInstance().getAssertedFile();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try {
