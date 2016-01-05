@@ -1,4 +1,27 @@
 $(document).ready(function () {
+//------------------------------------------------------------------------------
+    $("#radioset").buttonset();
+    $(".boxGroup").buttonset();
+    $("#distanceSlider").slider({
+        min: 40,
+        max: 200,
+        value: 80,
+        slide: function (event, ui) {
+            $("#distanceValue").html(ui.value);
+            d3.layout.force().linkDistance(ui.value);
+        }
+    });
+    $("#distanceValue").html($("#distanceSlider").slider("value"));
+    $("#zoomSlider").slider({
+        min: 20,
+        max: 200,
+        value: 100,
+        slide: function (event, ui) {
+            $("#zoomValue").html(ui.value);
+        }
+    });
+    $("#zoomValue").html($("#zoomSlider").slider("value"));
+//------------------------------------------------------------------------------
     $.post("FrontController?action=ReadOWLPath", function (string) {
         $("#owlPath").html(string);
     }, "text");
@@ -12,7 +35,7 @@ $(document).ready(function () {
             $("marker.inferred").fadeOut();
         }
     });
-    
+
     $("input[type=checkbox][name=assertedLinks]").change(function () {
         if ($("input[type=checkbox][name=assertedLinks]").prop("checked")) {
             $("path.asserted").fadeIn();
@@ -31,11 +54,27 @@ $(document).ready(function () {
         }
     });
 
+    $("input[type=checkbox][name=actorsNames]").change(function () {
+        if ($("input[type=checkbox][name=actorsNames]").prop("checked")) {
+            $("text.AgentName").fadeIn();
+        } else {
+            $("text.AgentName").fadeOut();
+        }
+    });
+
     $("input[type=checkbox][name=tasks]").change(function () {
         if ($("input[type=checkbox][name=tasks]").prop("checked")) {
             $("image.Activity").fadeIn();
         } else {
             $("image.Activity").fadeOut();
+        }
+    });
+
+    $("input[type=checkbox][name=tasksNames]").change(function () {
+        if ($("input[type=checkbox][name=tasksNames]").prop("checked")) {
+            $("text.ActivityName").fadeIn();
+        } else {
+            $("text.ActivityName").fadeOut();
         }
     });
 
@@ -47,30 +86,49 @@ $(document).ready(function () {
         }
     });
 
+    $("input[type=checkbox][name=entitiesNames]").change(function () {
+        if ($("input[type=checkbox][name=entitiesNames]").prop("checked")) {
+            $("text.EntityName").fadeIn();
+        } else {
+            $("text.EntityName").fadeOut();
+        }
+    });
+
     $("input[type=radio][name=icon]").change(function () {
         var svg = d3.select("#graph");
         if (this.value === "prov") {
             svg.selectAll("image")
                     .attr("xlink:href", function (node) {
-                        if (node.type === "Activity")
-                            return "./img/activity.png";
-                        else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent")
-                            return "./img/agent.png";
-                        else
-                            return "./img/entity.png";
+                        if (node.type === "Activity") {
+                            $("#titleTasks").html("Activities");
+                            return "./images/activity.png";
+                        } else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent") {
+                            $("#titleActors").html("Agents");
+                            return "./images/agent.png";
+                        } else {
+                            $("#titleEntities").html("Entities");
+                            return "./images/entity.png";
+                        }
                     });
         } else if (this.value === "bpmn") {
             svg.selectAll("image")
                     .attr("xlink:href", function (node) {
-                        if (node.type === "Activity")
-                            return "./img/task.png";
-                        else if (node.type === "Person" || node.type === "Agent")
-                            return "./img/actor.png";
-                        else
-                            return "./img/data.png";
+                        if (node.type === "Activity") {
+                            $("#titleTasks").html("Task");
+                            return "./images/task.png";
+                        } else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent") {
+                            $("#titleActors").html("Actors");
+                            return "./images/actor.png";
+                        } else {
+                            $("#titleEntities").html("Data Objects");
+                            return "./images/data.png";
+                        }
                     });
         } else {
-            svg.selectAll("image").attr("xlink:href", "./img/circle.png");
+            $("#titleTasks").html("Tasks/Activities");
+            $("#titleActors").html("Actors/Agents");
+            $("#titleEntities").html("Data Object/Entities");
+            svg.selectAll("image").attr("xlink:href", "./images/circle.png");
         }
     });
 });
