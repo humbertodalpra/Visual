@@ -1,8 +1,10 @@
 $(window).resize(function () {
-    var width = $(window).width() - 18;
-    var height = 700;//$(window).height() - ($("#config").height() + 32);
+    var width = $(window).width() - (88 + $("aside").width());
+    var height = $(window).height() - ($("header").height() + 40);
+
     $("#graph").width(width)
             .height(height);
+
     d3.select("svg")
             .attr("width", width)
             .attr("height", height);
@@ -12,18 +14,22 @@ $(document).ready(function () {
 
     var svg = d3.select("#graph")
             .append("svg");
-
+    
     $(window).resize();
 
     $.post("FrontController?action=ReadGraph", function (json) {
         //alert(JSON.stringify(json));
+        var width = $("#graph").width();
+        var height = $("#graph").height();
         var graph = json;
+
         var force = d3.layout.force()
                 .charge(-300)
                 .linkDistance(80)
-                .size([$("#graph").width(), $("#graph").height()]);
-
-        force.nodes(graph.nodes)
+                .linkStrength(0.1)
+                .friction(0.9)
+                .size([width, height])
+                .nodes(graph.nodes)
                 .links(graph.links)
                 .start();
 
@@ -60,10 +66,7 @@ $(document).ready(function () {
                         return "url(#inferred)";
                     else
                         return "url(#asserted)";
-                })
-                /*.style("stroke-width", function (d) {
-                 return Math.sqrt(d.value);
-                 })*/;
+                });
 
         path.append("title")
                 .text(function (d) {
@@ -76,12 +79,24 @@ $(document).ready(function () {
                 .attr("class", function (n) {
                     return n.type;
                 })
-                .attr("xlink:href", "./img/circle.png")
+                .attr("xlink:href", "./images/circle.png")
                 .attr("width", "24")
                 .attr("height", "24")
                 .call(force.drag);
 
         node.append("title")
+                .text(function (d) {
+                    return d.name;
+                });
+
+        var nodeName = svg.append("g").selectAll("text")
+                .data(force.nodes())
+                .enter().append("text")
+                .attr("class", function (n) {
+                    return n.type + "Name";
+                })
+                .attr("x", 10)
+                .attr("y", ".31em")
                 .text(function (d) {
                     return d.name;
                 });
@@ -112,9 +127,16 @@ $(document).ready(function () {
                     .attr("y", function (d) {
                         return d.y - 12;
                     });
+
+            nodeName.attr("x", function (d) {
+                return d.x;
+            })
+                    .attr("y", function (d) {
+                        return d.y;
+                    });
+
         });
 
     }, "json");
 
 });
-
