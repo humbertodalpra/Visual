@@ -25,7 +25,7 @@ public class GraphDAO {
             if (!types.isEmpty()) {
                 String name = individual.getIRI().getFragment();
                 String type = types.toString();
-                type = filterType(type);
+                type = filterUrl(type);
                 inferredGraph.addNode(new Node(name, type));
             }
         }
@@ -35,7 +35,7 @@ public class GraphDAO {
             if (!types.isEmpty()) {
                 String name = individual.getIRI().getFragment();
                 String type = types.toString();
-                type = filterType(type);
+                type = filterUrl(type);
                 Node source = new Node(name, type);
                 ArrayList<Node> targets = new ArrayList<>();
                 Map<OWLObjectPropertyExpression, Set<OWLIndividual>> individualMap = individual.getObjectPropertyValues(OntologyDAO.getInstance().getInferredOntology());
@@ -48,7 +48,7 @@ public class GraphDAO {
                         if (!targetTypes.isEmpty()) {
                             String targetName = individualProperty.asOWLNamedIndividual().getIRI().getFragment();
                             String targetType = targetTypes.toString();
-                            targetType = filterType(targetType);
+                            targetType = filterUrl(targetType);
                             targets.add(new Node(targetName, targetType));
                         }
                     }
@@ -67,7 +67,7 @@ public class GraphDAO {
             if (!types.isEmpty()) {
                 String name = individual.getIRI().getFragment();
                 String type = types.toString();
-                type = filterType(type);
+                type = filterUrl(type);
                 assertedGraph.addNode(new Node(name, type));
             }
         }
@@ -77,7 +77,7 @@ public class GraphDAO {
             if (!types.isEmpty()) {
                 String name = individual.getIRI().getFragment();
                 String type = types.toString();
-                type = filterType(type);
+                type = filterUrl(type);
                 Node source = new Node(name, type);
                 ArrayList<Node> targets = new ArrayList<>();
                 Map<OWLObjectPropertyExpression, Set<OWLIndividual>> individualMap = individual.getObjectPropertyValues(OntologyDAO.getInstance().getAssertedOntology());
@@ -90,7 +90,7 @@ public class GraphDAO {
                         if (!targetTypes.isEmpty()) {
                             String targetName = individualProperty.asOWLNamedIndividual().getIRI().getFragment();
                             String targetType = targetTypes.toString();
-                            targetType = filterType(targetType);
+                            targetType = filterUrl(targetType);
                             targets.add(new Node(targetName, targetType));
                         }
                     }
@@ -110,10 +110,10 @@ public class GraphDAO {
         return inferredGraph;
     }
 
-    private String filterType(String type) {
+    private String filterUrl(String url) {
         String reply;
         String[] array;
-        array = type.split("#");
+        array = url.split("#");
         if (array.length > 1) {
             reply = array[1];
         } else {
