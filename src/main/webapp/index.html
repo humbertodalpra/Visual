@@ -12,7 +12,7 @@
     <script src="js/d3.js"></script>
     <script src="js/index.js"></script>
     <script src="js/indexConfig.js"></script>
-    
+
 
     <div id="config">
         <header>
@@ -43,8 +43,8 @@
                 <div class="filters">
                     <span class="filterTitle">Inferences</span>
                     <div class="boxGroup">
-                                 <input type="checkbox" name="inferredNames" id="inferredNames"><label for="inferredNames">Names</label>
-                                 <input type="checkbox" name="inferredLinks" id="inferredLinks" checked><label for="inferredLinks">Links</label>
+                        <input type="checkbox" name="inferredNames" id="inferredNames"><label for="inferredNames">Names</label>
+                        <input type="checkbox" name="inferredLinks" id="inferredLinks" checked><label for="inferredLinks">Links</label>
                     </div>
                 </div>
                 <div class="filters">
@@ -52,7 +52,6 @@
                     <div class="boxGroup">
                         <input type="checkbox" name="assertedNames" id="assertedNames"><label for="assertedNames">Names</label>
                         <input type="checkbox" name="assertedLinks" id="assertedLinks" checked><label for="assertedLinks">Links</label>
-                        
                     </div>
                 </div>
                 <div class="filters">
@@ -60,7 +59,6 @@
                     <div class="boxGroup">
                         <input type="checkbox" name="actorsNames" id="actorsNames" checked><label for="actorsNames">Names</label>
                         <input type="checkbox" name="actors" id="actors" checked><label for="actors">Icons</label>
-                        
                     </div>
                 </div>
                 <div class="filters">
@@ -75,10 +73,13 @@
                     <div class="boxGroup">
                         <input type="checkbox" name="entitiesNames" id="entitiesNames" checked><label for="entitiesNames">Names</label>
                         <input type="checkbox" name="entities" id="entities" checked><label for="entities">Icons</label>
-                        
                     </div>
                 </div>
             </form>
         </aside>
+    </div>
+    <div id="tooltip">
+        <strong>Type: </strong><span id="tipType"></span><br>
+        <strong>Name: </strong><span id="tipName"></span><br>
     </div>
 </html>

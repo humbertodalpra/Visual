@@ -12,9 +12,18 @@ $(window).resize(function () {
 
 $(document).ready(function () {
 
+    var tooltip = d3.select("#tooltip")
+            .style("opacity", 0);
+
+    function writeTip(node) {
+        $("#tipName").html(node.name);
+        $("#tipType").html(node.type);
+        tooltip.style("left", (d3.event.pageX + 20) + "px")
+                .style("top", (d3.event.pageY - 20) + "px");
+    }
     var svg = d3.select("#graph")
             .append("svg");
-    
+
     $(window).resize();
 
     $.post("FrontController?action=ReadGraph", function (json) {
@@ -55,22 +64,23 @@ $(document).ready(function () {
         var path = svg.selectAll("path")
                 .data(graph.links)
                 .enter().append("path")
-                .attr("class", function (d) {
-                    if (d.inferred)
-                        return "inferred";
+                .attr("class", function (p) {
+                    var pathClass = "";
+                    if (p.inferred)
+                        pathClass = "inferred";
                     else
-                        return "asserted";
+                        pathClass = "asserted";
+                    pathClass += " s" + p.source.index + " t" + p.target.index;
+                    return pathClass;
                 })
-                .attr("marker-end", function (d) {
-                    if (d.inferred)
+                .on("mouseover", function (p) {
+                    //alert(JSON.stringify(p));
+                })
+                .attr("marker-end", function (p) {
+                    if (p.inferred)
                         return "url(#inferred)";
                     else
                         return "url(#asserted)";
-                });
-
-        path.append("title")
-                .text(function (d) {
-                    return d.name;
                 });
 
         var node = svg.selectAll("image")
@@ -80,20 +90,44 @@ $(document).ready(function () {
                     return n.type;
                 })
                 .attr("xlink:href", "./images/circle.png")
+                .attr("id", function (n) {
+                    return "node" + n.index;
+                })
                 .attr("width", "24")
                 .attr("height", "24")
+                .on("mouseover", function (n) {
+                    setOpacity(0.1);
+                    d3.select("#node" + n.index).style("opacity", 1.0);
+                    d3.select("#name" + n.index).style("opacity", 1.0);
+                    d3.selectAll(".s" + n.index).each(function (p) {
+                        d3.select(this).style("opacity", 1.0);
+                        d3.select("#node" + p.target.index).style("opacity", 1.0);
+                        d3.select("#name" + p.target.index).style("opacity", 1.0);
+                    });
+                    d3.selectAll(".t" + n.index).each(function (p) {
+                        d3.select(this).style("opacity", 1.0);
+                        d3.select("#node" + p.source.index).style("opacity", 1.0);
+                        d3.select("#name" + p.source.index).style("opacity", 1.0);
+                    });
+                })
+                .on("mouseout", function () {
+                    setOpacity(1.0);
+                    tooltip.style("opacity", 0);
+                })
+                .on("click", function (n) {
+                    writeTip(n);
+                    tooltip.style("opacity", 0.9);
+                })
                 .call(force.drag);
-
-        node.append("title")
-                .text(function (d) {
-                    return d.name;
-                });
 
         var nodeName = svg.append("g").selectAll("text")
                 .data(force.nodes())
                 .enter().append("text")
                 .attr("class", function (n) {
                     return n.type + "Name";
+                })
+                .attr("id", function (n) {
+                    return "name" + n.index;
                 })
                 .attr("x", 10)
                 .attr("y", ".31em")
@@ -136,7 +170,13 @@ $(document).ready(function () {
                     });
 
         });
-
+        
+        function setOpacity(value) {
+            node.style("opacity", value);
+            path.style("opacity", value);
+            nodeName.style("opacity", value);
+        }
+        
     }, "json");
 
 });

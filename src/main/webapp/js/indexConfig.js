@@ -95,35 +95,33 @@ $(document).ready(function () {
     });
 
     $("input[type=radio][name=icon]").change(function () {
-        var svg = d3.select("#graph");
+        var images = d3.selectAll("image");
         if (this.value === "prov") {
-            svg.selectAll("image")
-                    .attr("xlink:href", function (node) {
-                        if (node.type === "Activity") {
-                            $("#titleTasks").html("Activities");
-                            return "./images/activity.png";
-                        } else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent") {
-                            $("#titleActors").html("Agents");
-                            return "./images/agent.png";
-                        } else {
-                            $("#titleEntities").html("Entities");
-                            return "./images/entity.png";
-                        }
-                    });
+            images.attr("xlink:href", function (node) {
+                if (node.type === "Activity") {
+                    $("#titleTasks").html("Activities");
+                    return "./images/activity.png";
+                } else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent") {
+                    $("#titleActors").html("Agents");
+                    return "./images/agent.png";
+                } else {
+                    $("#titleEntities").html("Entities");
+                    return "./images/entity.png";
+                }
+            });
         } else if (this.value === "bpmn") {
-            svg.selectAll("image")
-                    .attr("xlink:href", function (node) {
-                        if (node.type === "Activity") {
-                            $("#titleTasks").html("Task");
-                            return "./images/task.png";
-                        } else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent") {
-                            $("#titleActors").html("Actors");
-                            return "./images/actor.png";
-                        } else {
-                            $("#titleEntities").html("Data Objects");
-                            return "./images/data.png";
-                        }
-                    });
+            images.attr("xlink:href", function (node) {
+                if (node.type === "Activity") {
+                    $("#titleTasks").html("Task");
+                    return "./images/task.png";
+                } else if (node.type === "Person" || node.type === "Agent" || node.type === "Organization" || node.type === "SoftwareAgent") {
+                    $("#titleActors").html("Actors");
+                    return "./images/actor.png";
+                } else {
+                    $("#titleEntities").html("Data Objects");
+                    return "./images/data.png";
+                }
+            });
         } else {
             $("#titleTasks").html("Tasks/Activities");
             $("#titleActors").html("Actors/Agents");
