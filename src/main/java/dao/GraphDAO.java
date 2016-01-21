@@ -38,23 +38,27 @@ public class GraphDAO {
                 type = filterUrl(type);
                 Node source = new Node(name, type);
                 ArrayList<Node> targets = new ArrayList<>();
+                ArrayList<String> propertyNames = new ArrayList<>();
                 Map<OWLObjectPropertyExpression, Set<OWLIndividual>> individualMap = individual.getObjectPropertyValues(OntologyDAO.getInstance().getInferredOntology());
                 Set<OWLObjectPropertyExpression> propertiesSet = individualMap.keySet();
                 for (OWLObjectPropertyExpression property : propertiesSet) {
+                    String propertyName = property.toString();
+                    propertyName = filterUrl(propertyName);
+                    System.out.println("Ataom " + propertyName);
                     Set<OWLIndividual> individualSet = individualMap.get(property);
                     for (OWLIndividual individualProperty : individualSet) {
                         Set<OWLClassExpression> targetTypes = individualProperty.getTypes(OntologyDAO.getInstance().getInferredOntology());
-                        //String propertyName = individualProperty.toStringID();
                         if (!targetTypes.isEmpty()) {
                             String targetName = individualProperty.asOWLNamedIndividual().getIRI().getFragment();
                             String targetType = targetTypes.toString();
                             targetType = filterUrl(targetType);
                             targets.add(new Node(targetName, targetType));
+                            propertyNames.add(propertyName);
                         }
                     }
                 }
                 if (!targets.isEmpty()) {
-                    inferredGraph.addLinks(name, true, source, targets);
+                    inferredGraph.addLinks(name, true, source, targets, propertyNames);
                 }
             }
         }

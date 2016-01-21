@@ -14,8 +14,8 @@ public class OntologyDAO {
 
     //private String inferredFile = "C:/Users/041784/Documents/NetBeansProjects/Visual/final2Ex1.owl";
     //private String assertedFile = "C:/Users/041784/Documents/NetBeansProjects/Visual/ex1.owl";
-    private String inferredFile = "C:/Users/041784/Documents/NetBeansProjects/Visual/inferredTest.owl";
-    private String assertedFile = "C:/Users/041784/Documents/NetBeansProjects/Visual/assertedTest.owl";
+    private String inferredFile = "C:/Users/Humberto/Desktop/ex1-englishInferred.owl";
+    private String assertedFile = "C:/Users/Humberto/Desktop/ex1-english.owl";
     private String uri = "http://www.w3.org/ns/prov#";
     private OWLOntology inferredOntology;
     private OWLOntology assertedOontology;

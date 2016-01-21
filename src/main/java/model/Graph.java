@@ -42,16 +42,17 @@ public class Graph {
         }
     }
 
-    public void addLinks(String name, boolean inferred, Node source, ArrayList<Node> targets) {
+    public void addLinks(String name, boolean inferred, Node source, ArrayList<Node> targets, ArrayList<String> linkNames) {
         int size = nodes.size();
         for (int s = 0; s < size; s++) {
             if (nodes.get(s).sameAs(source)) {
-                for (Node target : targets) {
+                for (int i = 0; i < targets.size(); i++) {
+                    Node target = targets.get(i);
                     for (int t = 0; t < size; t++) {
                         if (nodes.get(t).sameAs(target)) {
                             Link link = findLink(s, t);
                             if (link == null) {
-                                links.add(new Link(name, inferred, s, t));
+                                links.add(new Link(name, inferred, s, t, linkNames.get(i)));
                             }
                             //Adiciona lista de ligações------------------------
                         }

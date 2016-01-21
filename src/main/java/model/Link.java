@@ -6,12 +6,14 @@ public class Link {
     private boolean inferred;
     private Integer source;
     private Integer target;
+    private String type;
 
-    public Link(String name, boolean inferred, Integer source, Integer target) {
+    public Link(String name, boolean inferred, Integer source, Integer target, String type) {
         this.name = name;
         this.inferred = inferred;
         this.source = source;
         this.target = target;
+        this.type = type;
     }
 
     public String getName() {
@@ -44,6 +46,14 @@ public class Link {
 
     public void setTarget(Integer target) {
         this.target = target;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

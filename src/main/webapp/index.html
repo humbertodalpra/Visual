@@ -2,8 +2,7 @@
 <html lang="en-US">
 
     <meta charset="UTF-8">
-    <title>Provenance Ontology</title>
-
+   
     <link href="css/jquery-ui.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
@@ -15,9 +14,6 @@
 
 
     <div id="config">
-        <header>
-            <h1>Provenance Ontology</h1>Ontology: <span class="codeLike" id="owlPath"></span>
-        </header>
         <main>
             <div id="graph">
             </div>
@@ -41,17 +37,16 @@
                 </div>
                 <h2 class="demoHeaders">Filter Options</h2>
                 <div class="filters">
-                    <span class="filterTitle">Inferences</span>
+                    <span class="filterTitle">Arcs</span>
                     <div class="boxGroup">
-                        <input type="checkbox" name="inferredNames" id="inferredNames"><label for="inferredNames">Names</label>
-                        <input type="checkbox" name="inferredLinks" id="inferredLinks" checked><label for="inferredLinks">Links</label>
+                        <input type="checkbox" name="assertedArcs" id="assertedArcs" checked><label for="assertedArcs">Asserted</label>
+                        <input type="checkbox" name="inferredArcs" id="inferredArcs"><label for="inferredArcs">Inferred</label>
                     </div>
                 </div>
                 <div class="filters">
-                    <span class="filterTitle">Assertions</span>
-                    <div class="boxGroup">
-                        <input type="checkbox" name="assertedNames" id="assertedNames"><label for="assertedNames">Names</label>
-                        <input type="checkbox" name="assertedLinks" id="assertedLinks" checked><label for="assertedLinks">Links</label>
+                    <span class="filterTitle">Arc Types</span>
+                    <div class="boxGroup" id="divArcTypes">
+                        
                     </div>
                 </div>
                 <div class="filters">
@@ -78,8 +73,13 @@
             </form>
         </aside>
     </div>
-    <div id="tooltip">
-        <strong>Type: </strong><span id="tipType"></span><br>
-        <strong>Name: </strong><span id="tipName"></span><br>
+    <div id="nodeTip">
+        <strong>Type: </strong><span id="tipNodeType"></span><br>
+        <strong>Name: </strong><span id="tipNodeName"></span><br>
+    </div>
+    <div id="linkTip">
+        <strong>Type: </strong><span id="tipLinkType"></span><br>
+        <strong>Source: </strong><span id="tipSourceName"></span><br>
+        <strong>Target: </strong><span id="tipTargetName"></span><br>
     </div>
 </html>

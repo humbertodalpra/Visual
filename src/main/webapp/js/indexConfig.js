@@ -1,5 +1,28 @@
 $(document).ready(function () {
+//------------------------ Formação do filtro Arc Types ------------------------
+    $.post("FrontController?action=ReadGraph", function (json) {
+        var graph = json;
+        var types = [];
+        for (i in graph.links) {
+            types.push(graph.links[i].type);
+        }
+        var oddTypes = types.filter(function (first, same) {
+            return types.indexOf(first) == same;
+        });
+        for (i in oddTypes) {
+            var link = oddTypes[i];
+            $("#divArcTypes").append(function () {
+                var html = "<div class=\"boxGroup\">"
+                        + link + " <input type=\"checkbox\" name=\"arc" + link + "\" id=\"arc" + link + "\" checked>"
+                        + "<label for=\"arc" + link + "\"> on/off </label><br>"
+                        + "</div>";
+                return html;
+            });
+        }
+        $(".boxGroup").buttonset();
+    });
 //------------------------------------------------------------------------------
+
     $("#radioset").buttonset();
     $(".boxGroup").buttonset();
     $("#distanceSlider").slider({
@@ -26,8 +49,8 @@ $(document).ready(function () {
         $("#owlPath").html(string);
     }, "text");
 
-    $("input[type=checkbox][name=inferredLinks]").change(function () {
-        if ($("input[type=checkbox][name=inferredLinks]").prop("checked")) {
+    $("input[type=checkbox][name=inferredArcs]").change(function () {
+        if ($("input[type=checkbox][name=inferredArcs]").prop("checked")) {
             $("path.inferred").fadeIn();
             $("marker.inferred").fadeIn();
         } else {
@@ -36,8 +59,8 @@ $(document).ready(function () {
         }
     });
 
-    $("input[type=checkbox][name=assertedLinks]").change(function () {
-        if ($("input[type=checkbox][name=assertedLinks]").prop("checked")) {
+    $("input[type=checkbox][name=assertedArcs]").change(function () {
+        if ($("input[type=checkbox][name=assertedArcs]").prop("checked")) {
             $("path.asserted").fadeIn();
             $("marker.asserted").fadeIn();
         } else {
@@ -129,6 +152,7 @@ $(document).ready(function () {
             svg.selectAll("image").attr("xlink:href", "./images/circle.png");
         }
     });
+
 });
 
 

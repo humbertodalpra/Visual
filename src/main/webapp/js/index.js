@@ -12,14 +12,24 @@ $(window).resize(function () {
 
 $(document).ready(function () {
 
-    var tooltip = d3.select("#tooltip")
+    var nodeTip = d3.select("#nodeTip")
+            .style("opacity", 0);
+    var linkTip = d3.select("#linkTip")
             .style("opacity", 0);
 
-    function writeTip(node) {
-        $("#tipName").html(node.name);
-        $("#tipType").html(node.type);
-        tooltip.style("left", (d3.event.pageX + 20) + "px")
+    function writeNodeTip(node) {
+        $("#tipNodeName").html(node.name);
+        $("#tipNodeType").html(node.type);
+        nodeTip.style("left", (d3.event.pageX + 20) + "px")
                 .style("top", (d3.event.pageY - 20) + "px");
+    }
+
+    function writeLinkTip(link) {
+        $("#tipLinkType").html(link.type);
+        $("#tipSourceName").html(link.source.name);
+        $("#tipTargetName").html(link.target.name);
+        linkTip.style("left", (d3.event.pageX + 30) + "px")
+                .style("top", (d3.event.pageY - 30) + "px");
     }
     var svg = d3.select("#graph")
             .append("svg");
@@ -61,7 +71,7 @@ $(document).ready(function () {
                 })
                 .attr("d", "M0,-5L10,0L0,5");
 
-        var path = svg.selectAll("path")
+        var link = svg.selectAll("path")
                 .data(graph.links)
                 .enter().append("path")
                 .attr("class", function (p) {
@@ -73,11 +83,15 @@ $(document).ready(function () {
                     pathClass += " s" + p.source.index + " t" + p.target.index;
                     return pathClass;
                 })
-                .on("mouseover", function (p) {
-                    //alert(JSON.stringify(p));
+                .on("click", function (l) {
+                    writeLinkTip(l);
+                    linkTip.style("opacity", 0.9);
                 })
-                .attr("marker-end", function (p) {
-                    if (p.inferred)
+                .on("mouseout", function () {
+                    linkTip.style("opacity", 0);
+                })
+                .attr("marker-end", function (l) {
+                    if (l.inferred)
                         return "url(#inferred)";
                     else
                         return "url(#asserted)";
@@ -112,11 +126,11 @@ $(document).ready(function () {
                 })
                 .on("mouseout", function () {
                     setOpacity(1.0);
-                    tooltip.style("opacity", 0);
+                    nodeTip.style("opacity", 0);
                 })
                 .on("click", function (n) {
-                    writeTip(n);
-                    tooltip.style("opacity", 0.9);
+                    writeNodeTip(n);
+                    nodeTip.style("opacity", 0.9);
                 })
                 .call(force.drag);
 
@@ -136,7 +150,7 @@ $(document).ready(function () {
                 });
 
         force.on("tick", function () {
-            path.attr("x1", function (d) {
+            link.attr("x1", function (d) {
                 return d.source.x;
             })
                     .attr("y1", function (d) {
@@ -168,14 +182,16 @@ $(document).ready(function () {
                     .attr("y", function (d) {
                         return d.y;
                     });
-
         });
-        
+
         function setOpacity(value) {
             node.style("opacity", value);
-            path.style("opacity", value);
+            link.style("opacity", value);
             nodeName.style("opacity", value);
         }
+
+        $("path.inferred").fadeOut();
+        $("marker.inferred").fadeOut();
         
     }, "json");
 
